@@ -1,0 +1,13 @@
+# For Visual Studio Code
+.vscode
+!.vscodesettings.json
+!.vscodetasks.json
+!.vscodelaunch.json
+!.vscodeextensions.json
+!.vscode.code-snippets
+
+# Local History for Visual Studio Code
+.history
+
+# Built Visual Studio Code Extensions
+.vsix
