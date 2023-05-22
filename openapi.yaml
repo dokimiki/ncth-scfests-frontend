@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+    title: ncth-scfests-backend
+    description: ncth-scfests計画のバックエンド側APIです。
+    contact:
+        email: lmznd6yiew@gmail.com
+    version: 1.0.0
+servers:
+    - url: https://localhost:8080/api/v1
+      description: ローカル開発環境
+tags:
+    - name: auth
+      description: 認証系の処理をします。
+    - name: user
+      description: ユーザーデータの提供などをします。
+paths:
+    /:
+        get:
+            summary: Hello World
+            description: Hello, World!を返します。
+            responses:
+                "200":
+                    description: OK
+    /auth/login:
+        post:
+            tags:
+                - auth
+            summary: ログイン
+            description: 指定のユーザーとパスワードでログインします。
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                userId:
+                                    type: string
+                                    description: ユーザーID
+                                password:
+                                    type: string
+                                    description: パスワード
+                                returnSecureToken:
+                                    type: boolean
+                                    description: トークンを返すかどうか
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    displayName:
+                                        type: string
+                                        description: 表示名
+                                    userType:
+                                        type: string
+                                        description: ユーザーの種類
+                                    registered:
+                                        type: boolean
+                                        description: 登録済みかどうか
+                                    idToken:
+                                        type: string
+                                        nullable: true
+                                        description: データのやり取りに使うトークン(トークンを返す場合のみ)
+                                    refreshToken:
+                                        type: string
+                                        nullable: true
+                                        description: IDトークンの更新に使うトークン(トークンを返す場合のみ)
+                                    expiresIn:
+                                        type: string
+                                        nullable: true
+                                        description: IDトークンの有効期限(トークンを返す場合のみ)
+    /auth/refresh:
+        post:
+            tags:
+                - auth
+            summary: トークンの更新
+            description: リフレッシュトークンをもとに、新しいIDトークンとリフレッシュトークンを発行します。
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    description: リフレッシュトークン
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    idToken:
+                                        type: string
+                                        description: 新しいIDトークン
+                                    refreshToken:
+                                        type: string
+                                        description: 新しいリフレッシュトークン
+                                    expiresIn:
+                                        type: string
+                                        description: 新しいIDトークンの有効期限
+    /auth/logout:
+        post:
+            tags:
+                - auth
+            summary: ログアウト
+            description: >-
+                ログアウトをします。リフレッシュトークンを無効化しますが、JWTトークンは無効化されません。クライアント側でトークンを破棄することでログアウトとなります。
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    description: リフレッシュトークン
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        description: ログアウトメッセージ
+    /user/whoami:
+        get:
+            tags:
+                - user
+            summary: ユーザ情報取得
+            description: ログインしているユーザーの情報を取得します。
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    userId:
+                                        type: string
+                                        description: ユーザーID
+                                    displayName:
+                                        type: string
+                                        description: 表示名
+                                    userType:
+                                        type: string
+                                        description: ユーザーの種類
+                                    available:
+                                        type: boolean
+                                        description: 利用可能かどうか
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
