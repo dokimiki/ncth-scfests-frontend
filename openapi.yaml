@@ -24,7 +24,9 @@ paths:
           content:
             application/json:
               schema:
+                type: object
                 $ref: '#/components/schemas/Messages'
+
   /auth/login:
     post:
       tags:
@@ -35,16 +37,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginWithPassword'
+              type: object
+              $ref: '#/components/requestBodies/LoginWithPasswordRequest'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
+                type: object
                 allOf:
                   - $ref: '#/components/schemas/User'
                   - $ref: '#/components/schemas/NullableRefreshedToken'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Messages"
+
   /auth/refresh:
     post:
       tags:
@@ -55,14 +67,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefreshToken'
+              type: object
+              $ref: "#/components/requestBodies/RefreshTokenRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
+                type: object
                 $ref: "#/components/schemas/RefreshedToken"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Messages"
 
   /auth/logout:
     post:
@@ -75,14 +96,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefreshToken'
+              type: object
+              $ref: '#/components/requestBodies/RefreshTokenRequest'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
+                type: object
                 $ref: '#/components/schemas/Messages'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Messages"
+
   /user/whoami:
     get:
       tags:
@@ -97,16 +128,23 @@ paths:
           content:
             application/json:
               schema:
+                type: object
                 $ref: '#/components/schemas/User'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Messages"
+
 components:
   schemas:
     Messages:
-      type: object
       properties:
         message:
           type: string
     LoginWithPassword:
-      type: object
       properties:
         userId:
           type: string
@@ -118,13 +156,11 @@ components:
           type: boolean
           description: トークンを返すかどうか
     RefreshToken:
-      type: object
       properties:
         refreshToken:
           type: string
           description: リフレッシュトークン
     RefreshedToken:
-      type: object
       properties:
         idToken:
           type: string
@@ -136,7 +172,6 @@ components:
           type: string
           description: 新しいIDトークンの有効期限
     NullableRefreshedToken:
-      type: object
       properties:
         idToken:
           type: string
@@ -151,7 +186,6 @@ components:
           nullable: true
           description: IDトークンの有効期限(トークンを返す場合のみ)
     User:
-      type: object
       properties:
         userId:
           type: string
@@ -165,6 +199,19 @@ components:
         available:
           type: boolean
           description: 利用可能かどうか
+  requestBodies:
+    LoginWithPasswordRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: '#/components/schemas/LoginWithPassword'
+    RefreshTokenRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: '#/components/schemas/RefreshToken'
   securitySchemes:
     bearerAuth:
       type: http

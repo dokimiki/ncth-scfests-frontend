@@ -36,6 +36,13 @@
   dependencies:
     aspida "^1.12.0"
 
+"@aspida/fetch@^1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@aspida/fetch/-/fetch-1.12.0.tgz#4f6ace7ec3bdeb7b10cc67932a7a14f7304be478"
+  integrity sha512-g3eJubTTTOtkabzxbettVLV9PBQnN4AP0WfVDymjl/nfMEV/HaWSEnO7MfRIwnTQu+IN16u+NGgetiPlEofrtw==
+  dependencies:
+    aspida "^1.12.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.0", "@babel/code-frame@^7.21.4", "@babel/code-frame@^7.8.3":
   version "7.21.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.21.4.tgz#d0fa9e4413aca81f2b23b9442797bda1826edb39"
