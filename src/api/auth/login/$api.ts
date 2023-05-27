@@ -2,7 +2,7 @@ import type { AspidaClient, BasicHeaders } from 'aspida'
 import type { Methods as Methods0 } from '.'
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
-  const prefix = (baseURL === undefined ? 'https://localhost:8080/api/v1' : baseURL).replace(/\/$/, '')
+  const prefix = (baseURL === undefined ? 'http://localhost:3000/api/v1' : baseURL).replace(/\/$/, '')
   const PATH0 = '/auth/login'
   const POST = 'POST'
 

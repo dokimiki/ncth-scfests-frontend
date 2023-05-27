@@ -1,11 +1,13 @@
+import axios from "axios";
 import aspida from "@aspida/axios";
 import api from "api/$api";
 
 (async () => {
-    const client = api(aspida());
-    const res = await client.get();
+    const axiosConfig = { timeout: 3000 };
+    const client = api(aspida(axios, axiosConfig));
+    const res = await client.hello.get();
 
-    console.log(res);
+    console.log(res.body.message);
 })();
 
 const Index = () => {
