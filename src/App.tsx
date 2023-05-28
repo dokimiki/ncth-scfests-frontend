@@ -1,22 +1,43 @@
 import React, { FC } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Pages import
-import Index from "./components/pages/Index";
-import Login from "./components/pages/Login";
-import Dashboard from "./components/pages/Dashboard";
+import { Index } from "components/pages/Index";
+import { Login } from "components/pages/Login";
+import { Dashboard } from "components/pages/Dashboard";
+import { Scan } from "components/pages/Scan";
 
-const App: FC = () => {
-    // TODO: ログインしているかどうかの判別を行う
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route index element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-        </BrowserRouter>
-    );
+import { Layout } from "components/layouts/Layout";
+import { ErrorPage } from "components/pages/ErrorPage";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <Index />,
+            },
+            {
+                path: "/login",
+                element: <Login />,
+            },
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
+            },
+            {
+                path: "/scan",
+                element: <Scan />,
+            },
+        ],
+    },
+]);
+
+const App: FC = function () {
+    return <RouterProvider router={router} />;
 };
 
 export default App;

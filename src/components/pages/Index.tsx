@@ -9,15 +9,16 @@ const fetchConfig: FetchConfig = {
 
 const client = api(aspida(fetch, fetchConfig));
 
-const Index = () => {
+export const Index = function () {
     const [status, setStatus] = useState("now loading...");
 
     (async () => {
         try {
             const data = await client.hello.get();
-            console.log(data);
             setStatus(data.body.message !== undefined ? data.body.message : "");
         } catch (e) {
+            console.error("Hello API の呼び出しに失敗しました。");
+            setStatus("error");
             if (e instanceof HTTPError) {
                 console.log(e.response.status);
                 console.log(e.response.headers);
@@ -35,5 +36,3 @@ const Index = () => {
         </div>
     );
 };
-
-export default Index;

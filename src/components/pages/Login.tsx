@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-const Login = () => {
+export const Login = function () {
     return (
         <div>
             <h1>Login</h1>
@@ -21,5 +21,3 @@ const Login = () => {
         </div>
     );
 };
-
-export default Login;
