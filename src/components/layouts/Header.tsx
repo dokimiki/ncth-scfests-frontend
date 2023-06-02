@@ -1,17 +1,27 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
+import { SetStateAction, Dispatch } from "react";
+import {
+    Tooltip,
+    AppBar,
+    Box,
+    Toolbar,
+    Typography,
+    IconButton,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HelpIcon from "@mui/icons-material/Help";
 
-export const Header = function () {
+type HeaderProps = {
+    toggleDrawerOpen: Function;
+};
+
+export const Header = function (props: HeaderProps) {
+    const { toggleDrawerOpen } = props;
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar
+                position="fixed"
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            >
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -19,9 +29,11 @@ export const Header = function () {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={() => toggleDrawerOpen(true)}
                     >
                         <MenuIcon />
                     </IconButton>
+
                     <Typography
                         variant="h6"
                         component="div"
@@ -29,15 +41,16 @@ export const Header = function () {
                     >
                         Scfests
                     </Typography>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <HelpIcon />
-                    </IconButton>
+                    <Tooltip title="ヘルプ">
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                        >
+                            <HelpIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Toolbar>
             </AppBar>
         </Box>
