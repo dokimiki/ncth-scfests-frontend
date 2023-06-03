@@ -1,7 +1,10 @@
-import React from "react";
+import { useContext } from "react";
 import TextField from "@mui/material/TextField";
+import { PageTitleContext } from "context/PageTitleContext";
 
 export const Login = function () {
+    const { setPageTitle } = useContext(PageTitleContext);
+    setPageTitle("ログイン");
     return (
         <div>
             <h1>Login</h1>

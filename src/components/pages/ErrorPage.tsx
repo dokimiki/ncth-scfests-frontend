@@ -1,43 +1,35 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
+import { Layout } from "components/layouts/Layout";
+import { PageTitleContext } from "context/PageTitleContext";
+import { useContext } from "react";
 
 export const ErrorPage = function () {
+    const { setPageTitle } = useContext(PageTitleContext);
+    setPageTitle("エラー");
     const error = useRouteError();
 
-    if (isRouteErrorResponse(error)) {
-        if (error.status === 401) {
-            // ...
-        } else if (error.status === 404) {
-            // ...
-        }
+    let errorStatus: number | undefined;
+    let errorStatusText: string | undefined;
+    let errorMessage: string | undefined;
 
-        return (
-            <>
-                <h1>エラーが発生しました。係の人にお問い合わせください。</h1>
-                <div id="error-page">
-                    <h2>Oops! {error.status}</h2>
-                    <p>{error.statusText}</p>
-                    {error.data?.message && (
-                        <p>
-                            <i>{error.data.message}</i>
-                        </p>
-                    )}
-                </div>
-            </>
-        );
-    } else if (error instanceof Error) {
-        return (
-            <>
-                <h1>エラーが発生しました。係の人にお問い合わせください。</h1>
-                <div id="error-page">
-                    <h2>Oops! Unexpected Error</h2>
-                    <p>Something went wrong.</p>
-                    <p>
-                        <i>{error.message}</i>
-                    </p>
-                </div>
-            </>
-        );
-    } else {
-        return <></>;
+    if (isRouteErrorResponse(error)) {
+        errorStatus = error.status;
+        errorStatusText = error.statusText;
+        errorMessage = error.data?.message || "";
     }
+
+    if (error instanceof Error) {
+        errorMessage = error.message;
+    }
+
+    return (
+        <>
+            <h1>エラーが発生しました。係の人にお問い合わせください。</h1>
+            <div id="error-page">
+                <h2>Error status: {errorStatus}</h2>
+                <p>Error status text: {errorStatusText}</p>
+                <p>Error Message: {errorMessage}</p>
+            </div>
+        </>
+    );
 };

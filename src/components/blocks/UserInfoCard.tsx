@@ -1,10 +1,12 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Divider } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 type UserInfoCardProps = {
     userID: string;
@@ -29,31 +31,46 @@ export const UserInfoCard = function (props: UserInfoCardProps) {
 
     const { userName, userDescription, userImage } = getUserInfo(userID);
 
+    const cardStyle = css`
+        aspect-ratio: 16 / 9;
+        min-height: 300px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    `;
+
     return (
-        <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+        <Paper elevation={3} css={cardStyle}>
+            <div>
+                <Typography variant="h5">招待客</Typography>
+                <Divider />
                 <Typography
-                    sx={{ fontSize: 14 }}
+                    variant="subtitle2"
                     color="text.secondary"
                     gutterBottom
                 >
-                    Word of the Day
+                    ID: R5.114 0009
                 </Typography>
-                <Typography variant="h5" component="div">
-                    {userName}
+            </div>
+            <div>
+                <Typography variant="subtitle1" color="text.secondary">
+                    I-3 99 Lorem Ipsum より招待
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
-                </Typography>
-                <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button size="small">Learn More</Button>
-            </CardActions>
-        </Card>
+                <Typography variant="h4">Lorem Ipsum さん</Typography>
+            </div>
+            <div>
+                <Button
+                    size="medium"
+                    variant="contained"
+                    css={css`
+                        margin: 0 0 0 auto;
+                        display: block;
+                    `}
+                >
+                    閉じる
+                </Button>
+            </div>
+        </Paper>
     );
 };

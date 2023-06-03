@@ -8,7 +8,11 @@ import { Toolbar, Drawer } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 
-export const Layout = function () {
+type LayoutProps = {
+    outlet?: React.ReactNode;
+};
+
+export const Layout = function (props: LayoutProps) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const toggleDrawerOpen = () => {
@@ -30,6 +34,7 @@ export const Layout = function () {
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 aria-label="mailbox folders"
             >
+                {/* スマホ用 */}
                 <Drawer
                     open={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
@@ -43,6 +48,7 @@ export const Layout = function () {
                 >
                     <AppDrawer setIsDrawerOpen={setIsDrawerOpen} />
                 </Drawer>
+                {/* PC用 */}
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -74,7 +80,7 @@ export const Layout = function () {
                         height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
                     }}
                 >
-                    <Outlet />
+                    {props.outlet ? props.outlet : <Outlet />}
                 </Box>
             </Box>
         </Box>

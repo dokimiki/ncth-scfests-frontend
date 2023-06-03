@@ -1,6 +1,8 @@
 import aspida, { FetchConfig, HTTPError } from "@aspida/fetch";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import api from "api/$api";
+
+import { PageTitleContext } from "context/PageTitleContext";
 
 const fetchConfig: FetchConfig = {
     credentials: "include",
@@ -11,6 +13,10 @@ const client = api(aspida(fetch, fetchConfig));
 
 export const Index = function () {
     const [status, setStatus] = useState("now loading...");
+
+    const { setPageTitle } = useContext(PageTitleContext);
+
+    setPageTitle("ホーム");
 
     (async () => {
         try {

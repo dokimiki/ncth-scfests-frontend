@@ -1,13 +1,17 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import { QRReader } from "components/blocks/QRReader";
 import { UserInfoCard } from "components/blocks/UserInfoCard";
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { PageTitleContext } from "context/PageTitleContext";
 
 import Box from "@mui/material/Box";
 
-export const Scan = function () {
+export const Entrance = function () {
     const [QRContent, setQRContent] = useState("");
+    const { setPageTitle } = useContext(PageTitleContext);
+
+    setPageTitle("入場受付");
+
     return (
         <Box
             sx={{
@@ -22,7 +26,7 @@ export const Scan = function () {
         >
             <Box
                 sx={{
-                    width: "50vmin",
+                    width: "400px",
                 }}
             >
                 <QRReader setQRContent={setQRContent} />

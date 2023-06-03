@@ -9,9 +9,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Index } from "components/pages/Index";
 import { Login } from "components/pages/Login";
 import { Dashboard } from "components/pages/Dashboard";
-import { Scan } from "components/pages/Scan";
+import { Entrance } from "components/pages/Entrance";
 
 import { DarkModeContext } from "context/DarkModeContext";
+import { PageTitleContext } from "context/PageTitleContext";
 
 import { Layout } from "components/layouts/Layout";
 import { ErrorPage } from "components/pages/ErrorPage";
@@ -35,10 +36,26 @@ export const App: FC = function () {
         setIsDarkMode(!isDarkMode);
     };
 
-    const colorMode = {
+    const colorModeContext = {
         isDarkMode: isDarkMode,
         toggleDarkMode: () => toggleDarkMode(),
         setDarkMode: (value: boolean) => setIsDarkMode(value),
+    };
+
+    const [pageTitle, setPageTitle] = useState("Home");
+
+    useEffect(() => {
+        document.title =
+            pageTitleContext.titlePrefix +
+            pageTitle +
+            pageTitleContext.titleSuffix;
+    });
+
+    const pageTitleContext = {
+        title: pageTitle,
+        titlePrefix: "",
+        titleSuffix: " - Scfests",
+        setPageTitle: (value: string) => setPageTitle(value),
     };
 
     const theme = createTheme({
@@ -60,12 +77,14 @@ export const App: FC = function () {
     });
 
     return (
-        <DarkModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <RouterProvider router={router} />
-            </ThemeProvider>
-        </DarkModeContext.Provider>
+        <PageTitleContext.Provider value={pageTitleContext}>
+            <DarkModeContext.Provider value={colorModeContext}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                </ThemeProvider>
+            </DarkModeContext.Provider>
+        </PageTitleContext.Provider>
     );
 };
 
@@ -73,7 +92,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout />,
-        errorElement: <ErrorPage />,
+        errorElement: <Layout outlet={<ErrorPage />} />,
         children: [
             {
                 index: true,
@@ -88,8 +107,8 @@ const router = createBrowserRouter([
                 element: <Dashboard />,
             },
             {
-                path: "/scan",
-                element: <Scan />,
+                path: "/entrance",
+                element: <Entrance />,
             },
         ],
     },

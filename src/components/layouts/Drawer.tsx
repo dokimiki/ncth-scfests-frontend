@@ -5,15 +5,30 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
+import LoginIcon from "@mui/icons-material/Login";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { DarkModeContext } from "context/DarkModeContext";
+import { Link } from "react-router-dom";
 
 type DrawerProps = {
     setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+type DrawerListItems = {
+    text: string;
+    icon: React.ReactNode;
+    link: string;
+};
+
+type DrawerListBox = {
+    title?: string;
+    items: DrawerListItems[];
 };
 
 export const Drawer = function (props: DrawerProps) {
@@ -21,45 +36,87 @@ export const Drawer = function (props: DrawerProps) {
 
     const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
 
+    const drawerListBoxes: DrawerListBox[] = [
+        {
+            items: [
+                {
+                    text: "ホーム",
+                    icon: <HomeIcon />,
+                    link: "/",
+                },
+                {
+                    text: "ダッシュボード",
+                    icon: <InfoIcon />,
+                    link: "/dashboard",
+                },
+            ],
+        },
+        {
+            title: "入場管理",
+            items: [
+                {
+                    text: "入場",
+                    icon: <LoginIcon />,
+                    link: "/entrance",
+                },
+            ],
+        },
+        {
+            title: "アカウント",
+            items: [
+                {
+                    text: "ログイン",
+                    icon: <LoginIcon />,
+                    link: "/login",
+                },
+                {
+                    text: "登録",
+                    icon: <HowToRegIcon />,
+                    link: "/register",
+                },
+            ],
+        },
+    ];
+
     return (
         <div>
-            <Toolbar />
+            <Toolbar sx={{ display: { xs: "block", sm: "none" } }} />
+            <Toolbar>
+                <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{ flexGrow: 1, fontWeight: "bold" }}
+                >
+                    Scfests
+                </Typography>
+            </Toolbar>
             <Divider />
-            <List>
-                {["Inbox", "Starred", "Send email", "Drafts"].map(
-                    (text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton
-                                onClick={() => setIsDrawerOpen(false)}
-                                onKeyDown={() => setIsDrawerOpen(false)}
-                            >
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
+            {drawerListBoxes.map((drawerListBox) => (
+                <>
+                    <List>
+                        {drawerListBox.title && (
+                            <ListItem>
+                                <ListItemText secondary={drawerListBox.title} />
+                            </ListItem>
+                        )}
+
+                        {drawerListBox.items.map((item) => (
+                            <ListItem key={item.text} disablePadding>
+                                <ListItemButton
+                                    onClick={() => setIsDrawerOpen(false)}
+                                    onKeyDown={() => setIsDrawerOpen(false)}
+                                    component={Link}
+                                    to={item.link}
+                                >
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                    <ListItemText primary={item.text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                    <Divider />
+                </>
+            ))}
             <List>
                 <ListItem disablePadding>
                     <ListItemButton

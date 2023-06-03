@@ -1,13 +1,18 @@
+import { useContext } from "react";
 import {
     Tooltip,
     AppBar,
     Box,
+    Button,
     Toolbar,
     Typography,
     IconButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import HelpIcon from "@mui/icons-material/Help";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { PageTitleContext } from "context/PageTitleContext";
+import { useTheme } from "@mui/material/styles";
 
 type HeaderProps = {
     toggleDrawerOpen: Function;
@@ -16,6 +21,10 @@ type HeaderProps = {
 
 export const Header = function (props: HeaderProps) {
     const { toggleDrawerOpen, drawerWidth } = props;
+
+    const { title } = useContext(PageTitleContext);
+
+    const theme = useTheme();
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -44,17 +53,23 @@ export const Header = function (props: HeaderProps) {
                         component="div"
                         sx={{ flexGrow: 1 }}
                     >
-                        Scfests
+                        {title}
                     </Typography>
                     <Tooltip title="ヘルプ">
-                        <IconButton
-                            size="large"
-                            edge="start"
+                        <Button
+                            variant="outlined"
                             color="inherit"
-                            aria-label="menu"
+                            size="medium"
+                            sx={{
+                                minWidth: "0",
+                                padding: "5px",
+                                borderRadius:
+                                    theme.shape.borderRadius * 2 + "px",
+                                borderColor: "rgba(255, 255, 255, 0.3)",
+                            }}
                         >
-                            <HelpIcon />
-                        </IconButton>
+                            <HelpOutlineOutlinedIcon />
+                        </Button>
                     </Tooltip>
                 </Toolbar>
             </AppBar>
