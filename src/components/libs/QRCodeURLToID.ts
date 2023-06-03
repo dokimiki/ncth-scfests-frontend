@@ -1,27 +1,47 @@
 import { IDValidate } from "components/libs/IDValidate";
 
-export const QRCodeURLToID = function (url: string): string {
+export const QRCodeURLToID = function (
+    url: string,
+    shouldThrowError: boolean = false
+): string | undefined {
     const QRCodeBaseURL = process.env.REACT_APP_QR_CODE_BASE_URL ?? "";
     if (!url) {
-        throw new Error("URLが入力されていません。");
+        if (shouldThrowError) {
+            throw new Error("URLが入力されていません。");
+        } else {
+            return undefined;
+        }
     }
+
     if (url.startsWith(QRCodeBaseURL)) {
-        throw new Error("IDではないQRコードです: " + url);
+        if (shouldThrowError) {
+            throw new Error("IDではないQRコードです: " + url);
+        } else {
+            return undefined;
+        }
     }
 
     const ID = url.slice(QRCodeBaseURL.length);
 
-    if (url.length < 1) {
-        throw new Error("QRコードにIDが含まれていません。");
+    if (ID.length < 1) {
+        if (shouldThrowError) {
+            throw new Error("QRコードにIDが含まれていません。");
+        } else {
+            return undefined;
+        }
     }
 
     try {
-        IDValidate(ID, true);
+        IDValidate(ID, shouldThrowError);
     } catch (e) {
-        if (e instanceof Error) {
-            throw new Error("IDが不正です: " + e.message);
+        if (shouldThrowError) {
+            if (e instanceof Error) {
+                throw new Error("IDが不正です: " + e.message);
+            } else {
+                throw new Error("IDが不正です: " + e);
+            }
         } else {
-            throw new Error("IDが不正です: " + e);
+            return undefined;
         }
     }
 

@@ -31,35 +31,12 @@ const videoConstraints: MediaTrackConstraints = {
     },
 };
 
-const scannerContainerStyle = css`
-    * {
-        border-radius: 0.5rem 0.5rem 0 0;
-    }
-`;
-
 const switchCameraButtonStyle = css`
     z-index: 1;
     position: absolute;
     top: 0;
     right: 0;
 `;
-
-const cameraTargetStyle = css`
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.5;
-`;
-
-function URLToID(url: string): string {
-    return url;
-}
 
 const offScanner = (
     <div
@@ -86,6 +63,12 @@ const CameraError = function (props: CameraErrorProps) {
 
     const theme = useTheme();
 
+    const errorMessageStyle = css`
+        overflow-wrap: anywhere;
+        text-align: center;
+        margin: 0 ${theme.spacing(3)};
+    `;
+
     return (
         <div
             css={css`
@@ -104,7 +87,7 @@ const CameraError = function (props: CameraErrorProps) {
             >
                 <AnnouncementIcon style={{ fontSize: "10rem" }} />
                 <p className="text-sm">カメラのエラーです。</p>
-                <p className="text-sm">
+                <p className="text-sm" css={errorMessageStyle}>
                     エラーメッセージ: <code>{errorMessage}</code>
                 </p>
             </div>
@@ -143,6 +126,19 @@ const Scanner = function (props: ScannerProps) {
         toggleUseCamera,
         isEnvironmentCamera,
     } = props;
+
+    const cameraTargetStyle = css`
+        z-index: 1;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.5;
+    `;
 
     let lastScannedQR = "";
 
@@ -218,11 +214,10 @@ const Scanner = function (props: ScannerProps) {
 
 type QRIDReaderProps = {
     setQRContent: Dispatch<SetStateAction<string>>;
-    width?: string;
 };
 
 export const QRReader = function (props: QRIDReaderProps) {
-    const { setQRContent, width = "50vmin" } = props;
+    const { setQRContent } = props;
 
     const [isScanning, setIsScanning] = useState(true);
     const [isCameraError, setIsCameraError] = useState(false);
@@ -246,23 +241,28 @@ export const QRReader = function (props: QRIDReaderProps) {
 
     const scannerStyle = css`
         width: 100%;
+        height: 100%;
         aspect-ratio: 1;
-        border-radius: 0.5rem;
         > div {
             width: 100%;
             height: 100%;
-            background: ${theme.palette.divider};
+            background: ${theme.palette.mode === "light"
+                ? theme.palette.grey[300]
+                : theme.palette.grey[900]};
+        }
+    `;
+
+    const scannerContainerStyle = css`
+        * {
+            border-radius: ${theme.shape.borderRadius}px
+                ${theme.shape.borderRadius}px 0 0;
         }
     `;
 
     return (
         <div
             css={css`
-                width: ${width};
-                border-radius: 0.5rem;
-                border-style: solid;
-                border-width: 1px;
-                border-color: ${theme.palette.divider};
+                border-radius: ${theme.shape.borderRadius}px;
             `}
         >
             <div css={scannerContainerStyle}>
@@ -297,7 +297,8 @@ export const QRReader = function (props: QRIDReaderProps) {
                 startIcon={isScanning ? <NoPhotographyIcon /> : <CameraAlt />}
                 variant="contained"
                 css={css`
-                    border-radius: 0 0 0.5rem 0.5rem;
+                    border-radius: 0 0 ${theme.shape.borderRadius}px
+                        ${theme.shape.borderRadius}px;
                 `}
             >
                 {isScanning ? "スキャンを一時停止" : "スキャンを開始"}

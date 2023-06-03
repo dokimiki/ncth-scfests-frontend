@@ -1,4 +1,3 @@
-import { SetStateAction, Dispatch } from "react";
 import {
     Tooltip,
     AppBar,
@@ -12,15 +11,21 @@ import HelpIcon from "@mui/icons-material/Help";
 
 type HeaderProps = {
     toggleDrawerOpen: Function;
+    drawerWidth: number;
 };
 
 export const Header = function (props: HeaderProps) {
-    const { toggleDrawerOpen } = props;
+    const { toggleDrawerOpen, drawerWidth } = props;
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar
                 position="fixed"
-                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
             >
                 <Toolbar>
                     <IconButton
@@ -28,7 +33,7 @@ export const Header = function (props: HeaderProps) {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2 }}
+                        sx={{ mr: 2, display: { sm: "none" } }}
                         onClick={() => toggleDrawerOpen(true)}
                     >
                         <MenuIcon />
