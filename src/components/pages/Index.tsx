@@ -1,5 +1,5 @@
 import aspida, { FetchConfig, HTTPError } from "@aspida/fetch";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import api from "api/$api";
 
 import { PageTitleContext } from "context/PageTitleContext";
@@ -16,7 +16,7 @@ export const Index = function () {
 
     const { setPageTitle } = useContext(PageTitleContext);
 
-    setPageTitle("ホーム");
+    useEffect(() => setPageTitle("ホーム"), [setPageTitle]);
 
     (async () => {
         try {

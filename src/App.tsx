@@ -4,6 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import * as colors from "@mui/material/colors";
+
+import { SnackbarProvider } from "notistack";
 
 // Pages import
 import { Index } from "components/pages/Index";
@@ -16,7 +19,6 @@ import { PageTitleContext } from "context/PageTitleContext";
 
 import { Layout } from "components/layouts/Layout";
 import { ErrorPage } from "components/pages/ErrorPage";
-import * as colors from "@mui/material/colors";
 
 export const App: FC = function () {
     const defaultDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -80,8 +82,10 @@ export const App: FC = function () {
         <PageTitleContext.Provider value={pageTitleContext}>
             <DarkModeContext.Provider value={colorModeContext}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <RouterProvider router={router} />
+                    <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+                        <CssBaseline />
+                        <RouterProvider router={router} />
+                    </SnackbarProvider>
                 </ThemeProvider>
             </DarkModeContext.Provider>
         </PageTitleContext.Provider>

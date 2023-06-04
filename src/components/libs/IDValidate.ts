@@ -7,7 +7,7 @@ export const IDValidate = function (
     if (ID.split(".")[0] !== IDPrefix) {
         if (shouldThrowError) {
             throw new Error(
-                "頭の文字が不正です。\n年度の違うIDではありませんか？"
+                "接頭辞が不正です。\n年度や用途の違うIDではありませんか？"
             );
         } else {
             return false;
@@ -23,7 +23,7 @@ export const IDValidate = function (
     ) {
         if (shouldThrowError) {
             throw new Error(
-                "IDの識別番号を認識できません。\nIDが間違っていませんか？"
+                "IDの数字部分がありません。\nIDが間違っていませんか？"
             );
         } else {
             return false;

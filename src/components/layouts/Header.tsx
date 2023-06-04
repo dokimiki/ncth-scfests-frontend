@@ -27,12 +27,12 @@ export const Header = function (props: HeaderProps) {
     const theme = useTheme();
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
             <AppBar
                 position="fixed"
                 sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
+                    width: { md: `calc(100% - ${drawerWidth}px)` },
+                    ml: { md: `${drawerWidth}px` },
                     zIndex: (theme) => theme.zIndex.drawer + 1,
                 }}
             >
@@ -42,7 +42,7 @@ export const Header = function (props: HeaderProps) {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2, display: { sm: "none" } }}
+                        sx={{ mr: 2, display: { md: "none" } }}
                         onClick={() => toggleDrawerOpen(true)}
                     >
                         <MenuIcon />

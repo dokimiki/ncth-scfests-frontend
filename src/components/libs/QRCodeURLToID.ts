@@ -13,9 +13,13 @@ export const QRCodeURLToID = function (
         }
     }
 
-    if (url.startsWith(QRCodeBaseURL)) {
+    if (IDValidate(url)) {
+        return url;
+    }
+
+    if (!url.startsWith(QRCodeBaseURL)) {
         if (shouldThrowError) {
-            throw new Error("IDではないQRコードです: " + url);
+            throw new Error("文化祭用のQRコードではありません: " + url);
         } else {
             return undefined;
         }
@@ -25,7 +29,7 @@ export const QRCodeURLToID = function (
 
     if (ID.length < 1) {
         if (shouldThrowError) {
-            throw new Error("QRコードにIDが含まれていません。");
+            throw new Error("QRコードにIDの情報がありません。");
         } else {
             return undefined;
         }

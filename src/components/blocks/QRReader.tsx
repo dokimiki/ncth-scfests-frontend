@@ -11,7 +11,9 @@ import NoPhotographyIcon from "@mui/icons-material/NoPhotography";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import CameraswitchTwoToneIcon from "@mui/icons-material/CameraswitchTwoTone";
 import CameraAlt from "@mui/icons-material/CameraAlt";
+import { Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Paper } from "@mui/material";
 
 const videoConstraints: MediaTrackConstraints = {
     width: {
@@ -48,7 +50,7 @@ const offScanner = (
         `}
     >
         <NoPhotographyIcon style={{ fontSize: "10rem" }} />
-        <p className="text-sm">カメラがオフの状態です。</p>
+        <Typography variant="caption">カメラがオフの状態です。</Typography>
     </div>
 );
 
@@ -86,10 +88,10 @@ const CameraError = function (props: CameraErrorProps) {
                 `}
             >
                 <AnnouncementIcon style={{ fontSize: "10rem" }} />
-                <p className="text-sm">カメラのエラーです。</p>
-                <p className="text-sm" css={errorMessageStyle}>
+                <Typography variant="caption">カメラのエラーです。</Typography>
+                <Typography variant="caption" css={errorMessageStyle}>
                     エラーメッセージ: <code>{errorMessage}</code>
-                </p>
+                </Typography>
             </div>
 
             <Tooltip title="カメラを切り替える" css={switchCameraButtonStyle}>
@@ -114,6 +116,7 @@ type ScannerProps = {
     setError: Dispatch<SetStateAction<boolean>>;
     setCameraErrorMessage: Dispatch<SetStateAction<string>>;
     setQRResult: Dispatch<SetStateAction<string>>;
+    lastScannedQR: string;
     toggleUseCamera: Function;
     isEnvironmentCamera: boolean;
 };
@@ -123,6 +126,7 @@ const Scanner = function (props: ScannerProps) {
         setError,
         setCameraErrorMessage,
         setQRResult,
+        lastScannedQR,
         toggleUseCamera,
         isEnvironmentCamera,
     } = props;
@@ -139,8 +143,6 @@ const Scanner = function (props: ScannerProps) {
         align-items: center;
         opacity: 0.5;
     `;
-
-    let lastScannedQR = "";
 
     let environmentCamera = Object.assign(
         { facingMode: { ideal: "environment" } },
@@ -174,7 +176,6 @@ const Scanner = function (props: ScannerProps) {
                 onDecode={(result) => {
                     if (lastScannedQR !== result) {
                         console.log(result);
-                        lastScannedQR = result;
                         setQRResult(result);
                     }
                 }}
@@ -214,10 +215,11 @@ const Scanner = function (props: ScannerProps) {
 
 type QRIDReaderProps = {
     setQRContent: Dispatch<SetStateAction<string>>;
+    QRContent: string;
 };
 
 export const QRReader = function (props: QRIDReaderProps) {
-    const { setQRContent } = props;
+    const { setQRContent, QRContent } = props;
 
     const [isScanning, setIsScanning] = useState(true);
     const [isCameraError, setIsCameraError] = useState(false);
@@ -265,27 +267,30 @@ export const QRReader = function (props: QRIDReaderProps) {
                 border-radius: ${theme.shape.borderRadius}px;
             `}
         >
-            <div css={scannerContainerStyle}>
-                <div css={scannerStyle}>
-                    {isCameraError ? (
-                        <CameraError
-                            errorMessage={cameraErrorMessage}
-                            errorClear={clearError}
-                            toggleUseCamera={toggleUseCamera}
-                        />
-                    ) : isScanning ? (
-                        <Scanner
-                            setError={setIsCameraError}
-                            setCameraErrorMessage={setCameraErrorMessage}
-                            setQRResult={setQRContent}
-                            toggleUseCamera={toggleUseCamera}
-                            isEnvironmentCamera={isUseEnvironmentCamera}
-                        />
-                    ) : (
-                        offScanner
-                    )}
+            <Paper elevation={3}>
+                <div css={scannerContainerStyle}>
+                    <div css={scannerStyle}>
+                        {isCameraError ? (
+                            <CameraError
+                                errorMessage={cameraErrorMessage}
+                                errorClear={clearError}
+                                toggleUseCamera={toggleUseCamera}
+                            />
+                        ) : isScanning ? (
+                            <Scanner
+                                setError={setIsCameraError}
+                                setCameraErrorMessage={setCameraErrorMessage}
+                                setQRResult={setQRContent}
+                                lastScannedQR={QRContent}
+                                toggleUseCamera={toggleUseCamera}
+                                isEnvironmentCamera={isUseEnvironmentCamera}
+                            />
+                        ) : (
+                            offScanner
+                        )}
+                    </div>
                 </div>
-            </div>
+            </Paper>
 
             <Button
                 onClick={() => {

@@ -1,11 +1,12 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
-import { Layout } from "components/layouts/Layout";
 import { PageTitleContext } from "context/PageTitleContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export const ErrorPage = function () {
     const { setPageTitle } = useContext(PageTitleContext);
-    setPageTitle("エラー");
+
+    useEffect(() => setPageTitle("エラー"), [setPageTitle]);
+
     const error = useRouteError();
 
     let errorStatus: number | undefined;

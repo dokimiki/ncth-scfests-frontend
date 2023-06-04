@@ -15,6 +15,7 @@ import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { DarkModeContext } from "context/DarkModeContext";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 type DrawerProps = {
     setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -35,6 +36,8 @@ export const Drawer = function (props: DrawerProps) {
     const { setIsDrawerOpen } = props;
 
     const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
+
+    const theme = useTheme();
 
     const drawerListBoxes: DrawerListBox[] = [
         {
@@ -80,7 +83,7 @@ export const Drawer = function (props: DrawerProps) {
 
     return (
         <div>
-            <Toolbar sx={{ display: { xs: "block", sm: "none" } }} />
+            <Toolbar sx={{ display: { xs: "block", md: "none" } }} />
             <Toolbar>
                 <Typography
                     variant="h5"
@@ -91,8 +94,8 @@ export const Drawer = function (props: DrawerProps) {
                 </Typography>
             </Toolbar>
             <Divider />
-            {drawerListBoxes.map((drawerListBox) => (
-                <>
+            {drawerListBoxes.map((drawerListBox, n) => (
+                <div key={n}>
                     <List>
                         {drawerListBox.title && (
                             <ListItem>
@@ -115,7 +118,7 @@ export const Drawer = function (props: DrawerProps) {
                         ))}
                     </List>
                     <Divider />
-                </>
+                </div>
             ))}
             <List>
                 <ListItem disablePadding>

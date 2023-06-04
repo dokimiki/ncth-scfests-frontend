@@ -1,39 +1,29 @@
 /** @jsxImportSource @emotion/react */
+import { Dispatch, SetStateAction } from "react";
 import { css } from "@emotion/react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Divider } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import {
+    GetGuestInfo,
+    GuestInfo,
+    GuestTypeToJapanese,
+} from "components/libs/Guest";
 
 type UserInfoCardProps = {
     userID: string;
-};
-
-type UserInfo = {
-    userName: string;
-    userDescription: string;
-    userImage: string;
-};
-
-const getUserInfo = function (userID: string): UserInfo {
-    return {
-        userName: userID,
-        userDescription: "A random person",
-        userImage: "https://picsum.photos/200",
-    };
+    setQRContent?: Dispatch<SetStateAction<string>>;
 };
 
 export const UserInfoCard = function (props: UserInfoCardProps) {
-    const { userID } = props;
+    const { userID, setQRContent } = props;
 
-    const { userName, userDescription, userImage } = getUserInfo(userID);
+    const guest: GuestInfo | undefined = GetGuestInfo(userID);
 
     const cardStyle = css`
-        aspect-ratio: 16 / 9;
-        min-height: 300px;
+        height: 100%;
+        width: 100%;
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
@@ -42,22 +32,50 @@ export const UserInfoCard = function (props: UserInfoCardProps) {
 
     return (
         <Paper elevation={3} css={cardStyle}>
+            <Typography variant="subtitle1">来校者情報</Typography>
             <div>
-                <Typography variant="h5">招待客</Typography>
+                <Typography variant="h5">
+                    {guest ? GuestTypeToJapanese(guest.type) : <>&nbsp;</>}
+                </Typography>
                 <Divider />
                 <Typography
                     variant="subtitle2"
                     color="text.secondary"
                     gutterBottom
                 >
-                    ID: R5.114 0009
+                    {guest ? guest.id : <>&nbsp;</>}
                 </Typography>
             </div>
             <div>
                 <Typography variant="subtitle1" color="text.secondary">
-                    I-3 99 Lorem Ipsum より招待
+                    {guest ? (
+                        guest.invitedBy ? (
+                            guest.invitedBy.type === "student" ? (
+                                <>
+                                    {guest.invitedBy.class}
+                                    {guest.invitedBy.grade}{" "}
+                                    {guest.invitedBy.studentNumber?.padStart(
+                                        2,
+                                        "0"
+                                    )}{" "}
+                                    {guest.invitedBy.name} より招待
+                                </>
+                            ) : (
+                                <>{guest.invitedBy.name} より招待</>
+                            )
+                        ) : (
+                            <>
+                                {guest.class}
+                                {guest.grade} {guest.studentNumber}
+                            </>
+                        )
+                    ) : (
+                        <>&nbsp;</>
+                    )}
                 </Typography>
-                <Typography variant="h4">Lorem Ipsum さん</Typography>
+                <Typography variant="h4">
+                    {guest ? <>{guest.name} さん</> : <>&nbsp;</>}
+                </Typography>
             </div>
             <div>
                 <Button
@@ -67,6 +85,10 @@ export const UserInfoCard = function (props: UserInfoCardProps) {
                         margin: 0 0 0 auto;
                         display: block;
                     `}
+                    onClick={() => {
+                        setQRContent && setQRContent("");
+                    }}
+                    disabled={guest ? false : true}
                 >
                     閉じる
                 </Button>

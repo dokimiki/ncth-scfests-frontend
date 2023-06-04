@@ -24,14 +24,18 @@ export const Layout = function (props: LayoutProps) {
     const theme = useTheme();
 
     return (
-        <Box sx={{ display: "flex" }}>
+        <Box
+            sx={{
+                display: "flex",
+            }}
+        >
             <Header
                 toggleDrawerOpen={toggleDrawerOpen}
                 drawerWidth={drawerWidth}
             />
             <Box
                 component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
                 aria-label="mailbox folders"
             >
                 {/* スマホ用 */}
@@ -39,7 +43,7 @@ export const Layout = function (props: LayoutProps) {
                     open={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
                     sx={{
-                        display: { xs: "block", sm: "none" },
+                        display: { xs: "block", md: "none" },
                         "& .MuiDrawer-paper": {
                             boxSizing: "border-box",
                             width: drawerWidth,
@@ -52,7 +56,7 @@ export const Layout = function (props: LayoutProps) {
                 <Drawer
                     variant="permanent"
                     sx={{
-                        display: { xs: "none", sm: "block" },
+                        display: { xs: "none", md: "block" },
                         "& .MuiDrawer-paper": {
                             boxSizing: "border-box",
                             width: drawerWidth,
@@ -69,7 +73,7 @@ export const Layout = function (props: LayoutProps) {
                 sx={{
                     flexGrow: 1,
                     p: 3,
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    width: { md: `calc(100% - ${drawerWidth}px)` },
                     minHeight: "100vh",
                 }}
             >
